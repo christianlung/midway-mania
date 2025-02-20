@@ -1,5 +1,7 @@
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { XAxis, YAxis, ZAxis } from './models/Axis.js';
+import { createSphere } from './models/Sphere.js';
+import { createGround } from './models/Ground.js';
 
 // Create Renderer
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -22,37 +24,16 @@ camera.position.set(0, 2, 10);
 camera.lookAt(0, 0, 0); 
 
 // Add ground to the scene
-const ground = new THREE.Mesh(
-    new THREE.PlaneGeometry(50, 50), // Large ground area
-    new THREE.MeshPhongMaterial({ color: 0x228B22 }) // Grass green
-);
-ground.rotation.x = -Math.PI / 2; // Rotate to be flat
-ground.position.y = 0; // Adjust height
-scene.add(ground);
-
-//Add shiny sphere to the scene
-const geometry = new THREE.SphereGeometry(1, 32, 32);
-const phong_material = new THREE.MeshPhongMaterial({
-	color: 0x00ff00,
-    shininess: 100 
-});
-const sphere = new THREE.Mesh(geometry, phong_material);
-sphere.position.y = 3;
-scene.add(sphere);
+scene.add(createGround());
 
 // Add axis lines
-const createAxisLine = (color, start, end) => {
-    const geometry = new THREE.BufferGeometry().setFromPoints([start, end]);
-    const material = new THREE.LineBasicMaterial({ color: color });
-    return new THREE.Line(geometry, material);
-};
+scene.add(XAxis());
+scene.add(YAxis());
+scene.add(ZAxis());
 
-const xAxis = createAxisLine(0xff0000, new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 0)); // Red
-const yAxis = createAxisLine(0x00ff00, new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 3, 0)); // Green
-const zAxis = createAxisLine(0x0000ff, new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 3)); // Blue
-scene.add(xAxis);
-scene.add(yAxis);
-scene.add(zAxis);
+//Add green sphere to the scene
+const sphere = createSphere();
+scene.add(sphere);
 
 // Animation and clock
 let animation_time = 0;
