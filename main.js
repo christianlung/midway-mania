@@ -2,11 +2,12 @@ import * as THREE from 'three';
 import { XAxis, YAxis, ZAxis } from './models/Axis.js';
 import { createSphere } from './models/Sphere.js';
 import { createGround } from './models/Ground.js';
+import { translationMatrix, rotationMatrixY } from './utils/transform.js';
 
 // Create Renderer
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( renderer.domElement );
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
 // Create Scene with sunlight, ambient light, and background
 const scene = new THREE.Scene();
@@ -19,9 +20,9 @@ const ambientLight = new THREE.AmbientLight(0xffffff, 1);
 scene.add(ambientLight);
 
 // Position camera and center of interest
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.set(0, 2, 10);
-camera.lookAt(0, 5, 0); 
+camera.lookAt(0, 5, 0);
 
 // Add ground to the scene
 scene.add(createGround());
@@ -32,7 +33,7 @@ scene.add(YAxis());
 scene.add(ZAxis());
 
 //Add green sphere to the scene
-const sphere = createSphere();
+const sphere = createSphere(3, 1, 0);
 scene.add(sphere);
 
 // Animation and clock
@@ -41,14 +42,10 @@ let delta_animation_time;
 const clock = new THREE.Clock();
 
 function animate() {
-	renderer.render( scene, camera );
+    renderer.render(scene, camera);
 
-	delta_animation_time = clock.getDelta();
-    animation_time += delta_animation_time; 
-
-	const translationX = Math.sin(animation_time) * 2; 
-    sphere.position.x = translationX;
-
+    delta_animation_time = clock.getDelta();
+    animation_time += delta_animation_time;
 }
 
-renderer.setAnimationLoop( animate );
+renderer.setAnimationLoop(animate);

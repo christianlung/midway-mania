@@ -20,9 +20,9 @@ export function rotationMatrixX(theta) {
 
 export function rotationMatrixY(theta) {
     return new THREE.Matrix4().set(
-        Math.cos(theta), 0, Math.sin(theta), 0,
+        Math.cos(time + theta), 0, Math.sin(time + theta), 0,
         0, 1, 0, 0,
-        -Math.sin(theta), 0, Math.cos(theta), 0,
+        -Math.sin(time + theta), 0, Math.cos(time + theta), 0,
         0, 0, 0, 1
     );
 }
