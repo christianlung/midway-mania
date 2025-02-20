@@ -6,14 +6,20 @@ export function createAxisLine(color, start, end){
     return new THREE.Line(geometry, material);
 };
 
-export function XAxis(){
-    return createAxisLine(0xff0000, new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 0));
+export function XAxis(scene){
+    const axis = createAxisLine(0xff0000, new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 0));
+    scene.add(axis);
+    return axis;
 }
 
-export function YAxis(){
-    return createAxisLine(0x00ff00, new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 3, 0));
+export function YAxis(scene){
+    const axis = createAxisLine(0x00ff00, new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 3, 0));
+    scene.add(axis);
+    return axis;
 }
 
-export function ZAxis(){
-    return createAxisLine(0x0000ff, new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 3));
+export function ZAxis(scene){
+    const axis = createAxisLine(0x0000ff, new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 3));
+    scene.add(axis);
+    return axis;
 }

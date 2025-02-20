@@ -3,7 +3,7 @@ import { XAxis, YAxis, ZAxis } from './models/Axis.js';
 import { createSphere } from './models/Sphere.js';
 import { createGround } from './models/Ground.js';
 import { translationMatrix, rotationMatrixY } from './utils/transform.js';
-import { addAndTrackObject, applyMatrices } from './utils/util.js';
+import { applyMatrices } from './utils/util.js';
 
 // Stores all objects in the scene
 let objectList = []; 
@@ -32,16 +32,16 @@ const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
 // Add ground to the scene
-scene.add(createGround());
+createGround(scene);
 
 // Add axis lines
-scene.add(XAxis());
-scene.add(YAxis());
-scene.add(ZAxis());
+XAxis(scene);
+YAxis(scene);
+ZAxis(scene);
 
 //Add green sphere to the scene
-const sphere = createSphere();
-addAndTrackObject(sphere, scene, objectList);
+const sphere = createSphere(scene);
+objectList.push(sphere);
 
 // Animation and clock
 let animation_time = 0;
