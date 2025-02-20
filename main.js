@@ -21,7 +21,7 @@ scene.add(ambientLight);
 // Position camera and center of interest
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 camera.position.set(0, 2, 10);
-camera.lookAt(0, 0, 0); 
+camera.lookAt(0, 5, 0); 
 
 // Add ground to the scene
 scene.add(createGround());

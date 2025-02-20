@@ -43,4 +43,14 @@ export function scalingMatrix(sx, sy, sz) {
       0, 0, sz, 0,
       0, 0, 0, 1
     );
-  }
+}
+
+// Create sinusoidal x motion and sinusoidal y motion
+
+// Create sinusoidal x and y, left to right, up and down
+
+// Create circular motion with pivot
+
+// Create closer and further
+
+// Create bigger and smaller
