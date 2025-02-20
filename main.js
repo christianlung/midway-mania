@@ -47,8 +47,11 @@ function animate() {
     delta_animation_time = clock.getDelta();
     animation_time += delta_animation_time;
 
-    applyMatrices(sphere, rotationMatrixY(animation_time), translationMatrix(3, 1, 0));
-
+    // applyMatrices(sphere, rotationMatrixY(animation_time), translationMatrix(3, 1, 0));  => Rotate around y axis
+    // applyMatrices(sphere, translationMatrix(animation_time, 1, 0)); => Move right along x-axis
+    // applyMatrices(sphere, translationMatrix(0, animation_time, 0)); => Move up along y-axis
+    // applyMatrices(sphere, translationMatrix((1 + Math.sin((2 * Math.PI / 2) * animation_time)), 0, 0)); => Move left and right x-axis
+    // applyMatrices(sphere, translationMatrix(0, (1 + Math.sin((2 * Math.PI / 2) * animation_time)), 0)); => Move up and down y-axis
 }
 
 renderer.setAnimationLoop(animate);
