@@ -46,6 +46,14 @@ function animate() {
 
     delta_animation_time = clock.getDelta();
     animation_time += delta_animation_time;
+
+    const rotMatrix = rotationMatrixY(animation_time);
+    const translationMatrix = new THREE.Matrix4().makeTranslation(3, 1, 0);
+    
+    const finalMatrix = new THREE.Matrix4().multiplyMatrices(rotMatrix, translationMatrix);
+    sphere.matrix.copy(finalMatrix);
+
+
 }
 
 renderer.setAnimationLoop(animate);
