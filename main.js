@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { XAxis, YAxis, ZAxis } from './models/Axis.js';
 import { createSphere } from './models/Sphere.js';
 import { createGround } from './models/Ground.js';
-import { translationMatrix, rotationMatrixY } from './utils/transform.js';
+import { translationMatrix, rotationMatrixY, applyMatrices } from './utils/transform.js';
 
 // Create Renderer
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -33,7 +33,7 @@ scene.add(YAxis());
 scene.add(ZAxis());
 
 //Add green sphere to the scene
-const sphere = createSphere(3, 1, 0);
+const sphere = createSphere();
 scene.add(sphere);
 
 // Animation and clock
@@ -47,12 +47,7 @@ function animate() {
     delta_animation_time = clock.getDelta();
     animation_time += delta_animation_time;
 
-    const rotMatrix = rotationMatrixY(animation_time);
-    const translationMatrix = new THREE.Matrix4().makeTranslation(3, 1, 0);
-    
-    const finalMatrix = new THREE.Matrix4().multiplyMatrices(rotMatrix, translationMatrix);
-    sphere.matrix.copy(finalMatrix);
-
+    applyMatrices(sphere, rotationMatrixY(animation_time), translationMatrix(3, 1, 0));
 
 }
 
