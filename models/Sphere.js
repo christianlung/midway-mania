@@ -9,6 +9,7 @@ export function createSphere(scene) {
     });
     const sphere = new THREE.Mesh(geometry, phongMaterial);
     sphere.matrixAutoUpdate = false;
+    sphere.userData.isActive = true;
     scene.add(sphere);
     return sphere;
 }

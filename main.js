@@ -1,19 +1,33 @@
 import * as THREE from 'three';
 import { createScene } from './scene.js';
 import { createSphere } from './models/Sphere.js';
-import { translationMatrix, rotationMatrixY } from './utils/transform.js';
+import { translationMatrix, rotationMatrixY, scalingMatrix } from './utils/transform.js';
 import { applyMatrices, checkCollision } from './utils/util.js';
 import { shootDart } from './models/Dart.js';
+import { setHud } from './hud.js';
 
 // Stores all objects in the scene
 let targets = []; 
 let projectiles = [];
+let spherePoints = [];
+let points = 0;
+
 
 const { scene, camera, renderer } = createScene();
+const pointsCounter = setHud(renderer);
 
-//Add green sphere to the scene
+//Add green spheres to the scene
+//the index of each sphere corresponds to its point value
 const sphere = createSphere(scene);
+
 targets.push(sphere);
+spherePoints[0] = 100;
+const sphere1 = createSphere(scene);
+spherePoints[1] = 200;
+targets.push(sphere1);
+const sphere2 = createSphere(scene);
+spherePoints[2] = 50;
+targets.push(sphere2);
 
 // Animation and clock
 let animation_time = 0;
@@ -45,21 +59,31 @@ function animate() {
 
         // Collision detection
         targets.forEach((sphere, sphereIndex) => {
+            if (sphere.userData.isActive === false) {
+
+            } else {
             if (checkCollision(dart, sphere)){
                 scene.remove(sphere);
-                targets.splice(sphereIndex, 1);
+                //targets.splice(sphereIndex, 1);
+                points += spherePoints[sphereIndex];
+                pointsCounter.textContent = `Points: ${points}`;
 
                 scene.remove(dart);
                 projectiles.splice(dartIndex, 1);
+                sphere.visible = false;
+                sphere.userData.isActive = false;
             }
-        });
+        }});
     });
-
+    // applyMatrices(sphere, translationMatrix(0, 2, 0));
     // applyMatrices(sphere, rotationMatrixY(animation_time), translationMatrix(3, 1, 0)); // => Rotate around y axis
     // applyMatrices(sphere, translationMatrix(animation_time, 1, 0)); // => Move right along x-axis
     // applyMatrices(sphere, translationMatrix(0, animation_time, 0)); // => Move up along y-axis
     // applyMatrices(sphere, translationMatrix((1 + Math.sin((2 * Math.PI / 2) * animation_time)), 0, 0)); // => Move left and right x-axis
     // applyMatrices(sphere, translationMatrix(0, (1 + Math.sin((2 * Math.PI / 2) * animation_time)), 0)); // => Move up and down y-axis
+    applyMatrices(sphere, translationMatrix(0, 2 + (1 + Math.sin((2 * Math.PI / 2) * animation_time)), 0)); // => Move up and down y-axis, start at y = 2
+    applyMatrices(sphere1, translationMatrix((1 + Math.sin((2 * Math.PI / 2) * animation_time)), 8, 0)); // => Move up and down y-axis, start at y = 2
+    applyMatrices(sphere2, translationMatrix((-2 + Math.cos((2 * Math.PI / 2) * animation_time)), 3, -6));
 }
 
 renderer.setAnimationLoop(animate);
