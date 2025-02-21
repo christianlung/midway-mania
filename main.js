@@ -52,9 +52,6 @@ function animate() {
 
         // Collision detection
         targets.forEach((sphere, sphereIndex) => {
-            if (sphere.userData.isActive === false) {
-
-            } else {
             if (checkCollision(dart, sphere)){
                 points += sphere.userData.points;
                 pointsCounter.textContent = `Points: ${points}`;
@@ -64,7 +61,7 @@ function animate() {
                 scene.remove(dart);
                 projectiles.splice(dartIndex, 1);
             }
-        }});
+        });
     });
     // applyMatrices(sphere, translationMatrix(0, 2, 0));
     // applyMatrices(sphere, rotationMatrixY(animation_time), translationMatrix(3, 1, 0)); // => Rotate around y axis
