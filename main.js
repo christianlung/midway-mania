@@ -9,24 +9,17 @@ import { setHud } from './hud.js';
 // Stores all objects in the scene
 let targets = []; 
 let projectiles = [];
-let spherePoints = [];
 let points = 0;
-
 
 const { scene, camera, renderer } = createScene();
 const pointsCounter = setHud(renderer);
 
 //Add green spheres to the scene
-//the index of each sphere corresponds to its point value
 const sphere = createSphere(scene);
-
 targets.push(sphere);
-spherePoints[0] = 100;
-const sphere1 = createSphere(scene);
-spherePoints[1] = 200;
+const sphere1 = createSphere(scene, 200);
 targets.push(sphere1);
-const sphere2 = createSphere(scene);
-spherePoints[2] = 50;
+const sphere2 = createSphere(scene, 50);
 targets.push(sphere2);
 
 // Animation and clock
@@ -63,15 +56,13 @@ function animate() {
 
             } else {
             if (checkCollision(dart, sphere)){
-                scene.remove(sphere);
-                //targets.splice(sphereIndex, 1);
-                points += spherePoints[sphereIndex];
+                points += sphere.userData.points;
                 pointsCounter.textContent = `Points: ${points}`;
+                scene.remove(sphere);
+                targets.splice(sphereIndex, 1);
 
                 scene.remove(dart);
                 projectiles.splice(dartIndex, 1);
-                sphere.visible = false;
-                sphere.userData.isActive = false;
             }
         }});
     });

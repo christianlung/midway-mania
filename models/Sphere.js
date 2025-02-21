@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { translationMatrix } from '../utils/transform';
 
-export function createSphere(scene) {
+export function createSphere(scene, points=100) {
     const geometry = new THREE.SphereGeometry(1, 32, 32);
     const phongMaterial = new THREE.MeshPhongMaterial({
         color: 0x00ff00,
@@ -9,7 +9,7 @@ export function createSphere(scene) {
     });
     const sphere = new THREE.Mesh(geometry, phongMaterial);
     sphere.matrixAutoUpdate = false;
-    sphere.userData.isActive = true;
+    sphere.userData.points = points;
     scene.add(sphere);
     return sphere;
 }
