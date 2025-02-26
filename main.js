@@ -54,7 +54,7 @@ function animate() {
 
     for (let dartIndex = projectiles.length - 1; dartIndex >= 0; dartIndex--) {
         let dart = projectiles[dartIndex];
-        dart.position.add(dart.userData.velocity.clone().multiplyScalar(4 * delta_animation_time));
+        dart.position.add(dart.userData.velocity.clone().multiplyScalar(5 * delta_animation_time));
 
         // Iterate backwards over targets
         for (let sphereIndex = targets.length - 1; sphereIndex >= 0; sphereIndex--) {
@@ -92,4 +92,7 @@ window.addEventListener("click", onClick);
 // applyMatrices(sphere2, translationMatrix((-2 + Math.cos((2 * Math.PI / 2) * animation_time)), 3, -6));
 
 
-// TODO: make Hill into a class and create a GameManager class
+// TODO: generalize paths to a superclass
+    // need a createBackdrop and a createPath
+
+// dart minimizes too quickly
