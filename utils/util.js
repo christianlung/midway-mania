@@ -17,10 +17,6 @@ export function applyMatrices(obj, ...matrices) {
 }
 
 export function checkCollision(dart, sphere){
-    if ( sphere.userData.isActive == false) {
-        return false;
-    };
-
     dart.geometry.computeBoundingSphere();
     sphere.geometry.computeBoundingSphere();
 

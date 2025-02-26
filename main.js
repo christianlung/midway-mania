@@ -6,13 +6,23 @@ import { applyMatrices, checkCollision } from './utils/util.js';
 import { shootDart } from './models/Dart.js';
 import { setHud } from './hud.js';
 
+// testing purposes
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+const editMode = true;
+
 // Stores all objects in the scene
-let targets = []; 
+let targets = [];
 let projectiles = [];
 let points = 0;
 
 const { scene, camera, renderer } = createScene();
 const pointsCounter = setHud(renderer);
+
+let controls;
+if (editMode){
+    controls = new OrbitControls(camera, renderer.domElement);
+    controls.update();
+}
 
 //Add green spheres to the scene
 const sphere = createSphere(scene);
@@ -42,6 +52,9 @@ function onClick(event) {
 
 function animate() {
     renderer.render(scene, camera);
+    if (editMode){
+        controls.update();
+    }
 
     delta_animation_time = clock.getDelta();
     animation_time += delta_animation_time;
@@ -52,7 +65,7 @@ function animate() {
 
         // Collision detection
         targets.forEach((sphere, sphereIndex) => {
-            if (checkCollision(dart, sphere)){
+            if (checkCollision(dart, sphere)) {
                 points += sphere.userData.points;
                 pointsCounter.textContent = `Points: ${points}`;
                 scene.remove(sphere);

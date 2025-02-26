@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { XAxis, YAxis, ZAxis } from './models/Axis.js';
 import { createGround } from './models/Ground.js';
+import { createJaggedBackdrop } from './models/Backdrop.js';
 
 export function createScene() {
     // Scene
@@ -13,7 +14,7 @@ export function createScene() {
     document.body.appendChild(renderer.domElement);
 
     // Camera
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 15);
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 50);
     camera.position.set(0, 2, 10);
     camera.lookAt(0, 5, 0);
 
@@ -30,6 +31,7 @@ export function createScene() {
     XAxis(scene);
     YAxis(scene);
     ZAxis(scene);
+    createJaggedBackdrop(scene);
 
     return { scene, camera, renderer };
 }
