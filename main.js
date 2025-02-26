@@ -1,10 +1,11 @@
 import * as THREE from 'three';
 import { createScene } from './scene.js';
-import { createSphere } from './models/Sphere.js';
+import { animateSphere, createSphere } from './models/Sphere.js';
 import { translationMatrix, rotationMatrixY, scalingMatrix } from './utils/transform.js';
 import { applyMatrices, checkCollision } from './utils/util.js';
 import { shootDart } from './models/Dart.js';
 import { setHud } from './hud.js';
+import { createHillBackdrop } from './models/Path.js';
 
 // testing purposes
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -24,13 +25,10 @@ if (editMode){
     controls.update();
 }
 
-//Add green spheres to the scene
-const sphere = createSphere(scene);
+let brownHill = createHillBackdrop(scene, -30, -10, 1.0);
+let sphere = createSphere(scene);
 targets.push(sphere);
-const sphere1 = createSphere(scene, 200);
-targets.push(sphere1);
-const sphere2 = createSphere(scene, 50);
-targets.push(sphere2);
+animateSphere(sphere, brownHill);
 
 // Animation and clock
 let animation_time = 0;
@@ -82,10 +80,13 @@ function animate() {
     // applyMatrices(sphere, translationMatrix(0, animation_time, 0)); // => Move up along y-axis
     // applyMatrices(sphere, translationMatrix((1 + Math.sin((2 * Math.PI / 2) * animation_time)), 0, 0)); // => Move left and right x-axis
     // applyMatrices(sphere, translationMatrix(0, (1 + Math.sin((2 * Math.PI / 2) * animation_time)), 0)); // => Move up and down y-axis
-    applyMatrices(sphere, translationMatrix(0, 2 + (1 + Math.sin((2 * Math.PI / 2) * animation_time)), 0)); // => Move up and down y-axis, start at y = 2
-    applyMatrices(sphere1, translationMatrix((1 + Math.sin((2 * Math.PI / 2) * animation_time)), 8, 0)); // => Move up and down y-axis, start at y = 2
-    applyMatrices(sphere2, translationMatrix((-2 + Math.cos((2 * Math.PI / 2) * animation_time)), 3, -6));
+    // applyMatrices(sphere, translationMatrix(0, 2 + (1 + Math.sin((2 * Math.PI / 2) * animation_time)), 0)); // => Move up and down y-axis, start at y = 2
+    // applyMatrices(sphere1, translationMatrix((1 + Math.sin((2 * Math.PI / 2) * animation_time)), 8, 0)); // => Move up and down y-axis, start at y = 2
+    // applyMatrices(sphere2, translationMatrix((-2 + Math.cos((2 * Math.PI / 2) * animation_time)), 3, -6));
 }
 
 renderer.setAnimationLoop(animate);
 window.addEventListener("click", onClick);
+
+
+// define left edge for window

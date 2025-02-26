@@ -26,7 +26,7 @@ export function createScene() {
     const ambientLight = new THREE.AmbientLight(0xffffff, 1);
     scene.add(ambientLight);
 
-    // Ground and axes
+    // Static background
     createGround(scene);
     XAxis(scene);
     YAxis(scene);
