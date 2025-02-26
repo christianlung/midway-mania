@@ -1,8 +1,7 @@
 import * as THREE from 'three';
 import { createScene } from './scene.js';
 import { animateSphere, createSphere } from './models/Sphere.js';
-import { translationMatrix, rotationMatrixY, scalingMatrix } from './utils/transform.js';
-import { applyMatrices, checkCollision } from './utils/util.js';
+import { checkCollision } from './utils/util.js';
 import { shootDart } from './models/Dart.js';
 import { setHud } from './hud.js';
 import { createHillBackdrop } from './models/Path.js';
@@ -74,15 +73,6 @@ function animate() {
             }
         });
     });
-    // applyMatrices(sphere, translationMatrix(0, 2, 0));
-    // applyMatrices(sphere, rotationMatrixY(animation_time), translationMatrix(3, 1, 0)); // => Rotate around y axis
-    // applyMatrices(sphere, translationMatrix(animation_time, 1, 0)); // => Move right along x-axis
-    // applyMatrices(sphere, translationMatrix(0, animation_time, 0)); // => Move up along y-axis
-    // applyMatrices(sphere, translationMatrix((1 + Math.sin((2 * Math.PI / 2) * animation_time)), 0, 0)); // => Move left and right x-axis
-    // applyMatrices(sphere, translationMatrix(0, (1 + Math.sin((2 * Math.PI / 2) * animation_time)), 0)); // => Move up and down y-axis
-    // applyMatrices(sphere, translationMatrix(0, 2 + (1 + Math.sin((2 * Math.PI / 2) * animation_time)), 0)); // => Move up and down y-axis, start at y = 2
-    // applyMatrices(sphere1, translationMatrix((1 + Math.sin((2 * Math.PI / 2) * animation_time)), 8, 0)); // => Move up and down y-axis, start at y = 2
-    // applyMatrices(sphere2, translationMatrix((-2 + Math.cos((2 * Math.PI / 2) * animation_time)), 3, -6));
 }
 
 renderer.setAnimationLoop(animate);
@@ -90,3 +80,15 @@ window.addEventListener("click", onClick);
 
 
 // define left edge for window
+// applyMatrices(sphere, translationMatrix(0, 2, 0));
+// applyMatrices(sphere, rotationMatrixY(animation_time), translationMatrix(3, 1, 0)); // => Rotate around y axis
+// applyMatrices(sphere, translationMatrix(animation_time, 1, 0)); // => Move right along x-axis
+// applyMatrices(sphere, translationMatrix(0, animation_time, 0)); // => Move up along y-axis
+// applyMatrices(sphere, translationMatrix((1 + Math.sin((2 * Math.PI / 2) * animation_time)), 0, 0)); // => Move left and right x-axis
+// applyMatrices(sphere, translationMatrix(0, (1 + Math.sin((2 * Math.PI / 2) * animation_time)), 0)); // => Move up and down y-axis
+// applyMatrices(sphere, translationMatrix(0, 2 + (1 + Math.sin((2 * Math.PI / 2) * animation_time)), 0)); // => Move up and down y-axis, start at y = 2
+// applyMatrices(sphere1, translationMatrix((1 + Math.sin((2 * Math.PI / 2) * animation_time)), 8, 0)); // => Move up and down y-axis, start at y = 2
+// applyMatrices(sphere2, translationMatrix((-2 + Math.cos((2 * Math.PI / 2) * animation_time)), 3, -6));
+
+
+// TODO: make Hill into a class and create a GameManager class

@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { createSphere, animateSphere } from './Sphere';
 
 export function createHillBackdrop(scene, startX, depth, scale) {
     const hillShape = new THREE.Shape();
