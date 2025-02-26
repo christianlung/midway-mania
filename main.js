@@ -18,7 +18,7 @@ const { scene, camera, renderer } = createScene();
 const pointsCounter = setHud(renderer);
 
 let controls;
-if (editMode){
+if (editMode) {
     controls = new OrbitControls(camera, renderer.domElement);
     controls.update();
 }
@@ -45,30 +45,35 @@ function onClick(event) {
 
 function animate() {
     renderer.render(scene, camera);
-    if (editMode){
+    if (editMode) {
         controls.update();
     }
 
     delta_animation_time = clock.getDelta();
     animation_time += delta_animation_time;
 
-    projectiles.forEach((dart, dartIndex) => {
-        // Transform the projectiles
-        dart.position.add(dart.userData.velocity.clone().multiplyScalar(delta_animation_time));
+    for (let dartIndex = projectiles.length - 1; dartIndex >= 0; dartIndex--) {
+        let dart = projectiles[dartIndex];
+        dart.position.add(dart.userData.velocity.clone().multiplyScalar(4 * delta_animation_time));
 
-        // Collision detection
-        targets.forEach((sphere, sphereIndex) => {
+        // Iterate backwards over targets
+        for (let sphereIndex = targets.length - 1; sphereIndex >= 0; sphereIndex--) {
+            let sphere = targets[sphereIndex];
+
             if (checkCollision(dart, sphere)) {
                 points += sphere.userData.points;
                 pointsCounter.textContent = `Points: ${points}`;
+
+                // Remove sphere and dart
                 scene.remove(sphere);
                 targets.splice(sphereIndex, 1);
 
                 scene.remove(dart);
                 projectiles.splice(dartIndex, 1);
+                break; // Exit early since dart is removed
             }
-        });
-    });
+        }
+    }
 }
 
 renderer.setAnimationLoop(animate);

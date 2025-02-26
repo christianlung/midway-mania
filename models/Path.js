@@ -54,6 +54,8 @@ class Hill {
         let positionIndex = 0;
 
         const move = () => {
+            if (!this.scene || !sphere.parent) return;
+
             if (positionIndex < this.hillPoints.length - 1) {
                 let x1 = this.hillPoints[Math.floor(positionIndex)].x;
                 let y1 = this.hillPoints[Math.floor(positionIndex)].y;
@@ -72,8 +74,11 @@ class Hill {
                 positionIndex += speed; // Move forward slightly
                 requestAnimationFrame(move);
             } else {
-                this.scene.remove(sphere);
-                this.targets.splice(this.targets.indexOf(sphere), 1);
+                if (sphere.parent) { // Ensure it's still in the scene
+                    this.scene.remove(sphere);
+                    const index = this.targets.indexOf(sphere);
+                    if (index !== -1) this.targets.splice(index, 1);
+                }
             }
 
 

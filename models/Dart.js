@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-export function shootDart(camera, scene, raycaster, speed=100, projectiles){
+export function shootDart(camera, scene, raycaster, speed=200, projectiles){
     const geometry = new THREE.SphereGeometry(0.1, 16, 16);
     const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
     const dart = new THREE.Mesh(geometry, material);
