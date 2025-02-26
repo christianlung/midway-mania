@@ -1,10 +1,9 @@
 import * as THREE from 'three';
 import { createScene } from './scene.js';
-import { animateSphere, createSphere } from './models/Sphere.js';
 import { checkCollision } from './utils/util.js';
 import { shootDart } from './models/Dart.js';
 import { setHud } from './hud.js';
-import { createHillBackdrop } from './models/Path.js';
+import Hill from './models/Path.js';
 
 // testing purposes
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -24,10 +23,7 @@ if (editMode){
     controls.update();
 }
 
-let brownHill = createHillBackdrop(scene, -30, -10, 1.0);
-let sphere = createSphere(scene);
-targets.push(sphere);
-animateSphere(sphere, brownHill);
+const hill = new Hill(scene, -30, -10, 1.0, targets);
 
 // Animation and clock
 let animation_time = 0;
