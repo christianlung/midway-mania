@@ -8,7 +8,7 @@ import { setHud } from './hud.js';
 
 // testing purposes
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-const editMode = true;
+const editMode = false;
 
 // Stores all objects in the scene
 let targets = [];

@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-export function createJaggedBackdrop(scene) {
+export function createJaggedBackdrop(scene, startX, depth, scale) {
     const points = [
         [0, 0],
         [1, 3],
@@ -42,8 +42,21 @@ export function createJaggedBackdrop(scene) {
     });
   
     const backdropMesh = new THREE.Mesh(geometry, material);
-    backdropMesh.position.set(0, 0, -10);
+    backdropMesh.position.set(startX, 0, depth);
+    backdropMesh.scale.set(scale, scale, scale)
   
     scene.add(backdropMesh);
   
+}
+
+export function addMountains(scene){
+    const mountainProperties = [
+        { startX: -10, depth: -15, scale: 1.5 },
+        { startX: 15, depth: -20, scale: 1 },
+        { startX: -18, depth: -20, scale: 0.75 }
+    ]
+
+    mountainProperties.forEach(({ startX, depth, scale }) => {
+        createJaggedBackdrop(scene, startX, depth, scale);
+    });
 }
