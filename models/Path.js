@@ -3,12 +3,13 @@ import { createSphere } from './Sphere';
 import { translationMatrix, rotationMatrixZ } from '../utils/transform';
 
 class PathObject {
-    constructor(scene, startX, depth, scale, targets, drawBackdrop = true) {
+    constructor(scene, startX, depth, scale, targets, drawBackdrop = true, reverse = false) {
         this.scene = scene;
         this.startX = startX;
         this.depth = depth;
         this.scale = scale;
         this.targets = targets;
+        this.direction = !reverse ? 1 : -1;
         this.pathPoints = this.createPath();
         if (drawBackdrop) this.createBackdrop();
         this.streamObjects();
@@ -45,12 +46,14 @@ class PathObject {
     }
 
     animateObject(object, speed = 0.05) {
-        let positionIndex = 0;
+        let positionIndex = this.direction === 1 ? 0 : this.pathPoints.length - 1;
 
         const move = () => {
             if (!this.scene || !object.parent) return;
 
-            if (positionIndex < this.pathPoints.length - 1) {
+            const nextIndex = positionIndex + this.direction * speed;
+
+            if (nextIndex >= 0 && nextIndex < this.pathPoints.length - 1) {
                 let x1 = this.pathPoints[Math.floor(positionIndex)].x;
                 let y1 = this.pathPoints[Math.floor(positionIndex)].y;
                 let x2 = this.pathPoints[Math.ceil(positionIndex)].x;
@@ -64,7 +67,7 @@ class PathObject {
                 object.matrix.copy(translationMatrix(x, y + 1, this.depth)); // Adjust z-depth
                 object.matrix.multiply(rotationMatrixZ(Math.atan2(y2 - y1, x2 - x1))); // Rotate sphere along slope
 
-                positionIndex += speed; // Move forward slightly
+                positionIndex = nextIndex;
                 requestAnimationFrame(move);
             } else {
                 if (object.parent) { // Ensure it's still in the scene
@@ -84,7 +87,7 @@ class PathObject {
             const object = this.createObject(); // Must be implemented in subclass
             this.targets.push(object);
             this.animateObject(object);
-        }, 2000);
+        }, 3000);
     }
 }
 
@@ -106,8 +109,8 @@ class HillPath extends PathObject{
 }
 
 class AerialPath extends PathObject {
-    constructor(scene, startX, depth, scale, targets) {
-        super(scene, startX, depth, scale, targets, false);
+    constructor(scene, startX, depth, scale, targets, reverse) {
+        super(scene, startX, depth, scale, targets, false, reverse);
     }
 
     createPath() {

@@ -24,7 +24,7 @@ if (editMode) {
 }
 
 const hill = new HillPath(scene, -30, -10, 1.0, targets);
-const aerial = new AerialPath(scene, -30, -13, 1.0, targets);
+const aerial = new AerialPath(scene, -30, -13, 1.0, targets, true);
 
 // Animation and clock
 let animation_time = 0;
@@ -82,7 +82,8 @@ window.addEventListener("click", onClick);
 
 
 // TODO:
-// reverse and offset to the paths
+// offset to the paths
+// performance when too many objects -> lag -> unexpected behavior
 // dart minimizes too quickly
 // change gun to a blaster
 // find other models for targets
