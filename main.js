@@ -3,7 +3,7 @@ import { createScene } from './scene.js';
 import { checkCollision } from './utils/util.js';
 import { shootDart } from './models/Dart.js';
 import { setHud } from './hud.js';
-import Hill from './models/Path.js';
+import { HillPath, AerialPath} from './models/Path.js';
 
 // testing purposes
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -23,7 +23,8 @@ if (editMode) {
     controls.update();
 }
 
-const hill = new Hill(scene, -30, -10, 1.0, targets);
+const hill = new HillPath(scene, -30, -10, 1.0, targets);
+const aerial = new AerialPath(scene, -30, -13, 1.0, targets);
 
 // Animation and clock
 let animation_time = 0;
@@ -80,19 +81,12 @@ renderer.setAnimationLoop(animate);
 window.addEventListener("click", onClick);
 
 
-// define left edge for window
-// applyMatrices(sphere, translationMatrix(0, 2, 0));
-// applyMatrices(sphere, rotationMatrixY(animation_time), translationMatrix(3, 1, 0)); // => Rotate around y axis
-// applyMatrices(sphere, translationMatrix(animation_time, 1, 0)); // => Move right along x-axis
-// applyMatrices(sphere, translationMatrix(0, animation_time, 0)); // => Move up along y-axis
-// applyMatrices(sphere, translationMatrix((1 + Math.sin((2 * Math.PI / 2) * animation_time)), 0, 0)); // => Move left and right x-axis
-// applyMatrices(sphere, translationMatrix(0, (1 + Math.sin((2 * Math.PI / 2) * animation_time)), 0)); // => Move up and down y-axis
-// applyMatrices(sphere, translationMatrix(0, 2 + (1 + Math.sin((2 * Math.PI / 2) * animation_time)), 0)); // => Move up and down y-axis, start at y = 2
-// applyMatrices(sphere1, translationMatrix((1 + Math.sin((2 * Math.PI / 2) * animation_time)), 8, 0)); // => Move up and down y-axis, start at y = 2
-// applyMatrices(sphere2, translationMatrix((-2 + Math.cos((2 * Math.PI / 2) * animation_time)), 3, -6));
-
-
-// TODO: generalize paths to a superclass
-    // need a createBackdrop and a createPath
-
+// TODO:
+// reverse and offset to the paths
 // dart minimizes too quickly
+// change gun to a blaster
+// find other models for targets
+// implement gravity for projectiles
+    // implement balls disappear after falling down?
+    // implement balls bouncing off objects
+// change transformation instead of steady stream
