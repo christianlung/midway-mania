@@ -1,4 +1,3 @@
-import * as THREE from 'three';
 import { createSphere } from './Sphere';
 import { translationMatrix, rotationMatrixZ } from '../utils/transform';
 
@@ -86,7 +85,7 @@ class HillPath extends PathObject {
 
 class AerialPath extends PathObject {
     constructor(scene, startX, depth, targets, reverse) {
-        super(scene, startX, depth, targets, false, reverse);
+        super(scene, startX, depth, targets, reverse);
     }
 
     createPath() {
@@ -95,6 +94,10 @@ class AerialPath extends PathObject {
             points.push({ x: this.startX + i, y: 10 + Math.sin(i * 0.2) * 3, z: this.depth });
         }
         return points;
+    }
+
+    createObject() {
+        return createSphere(this.scene, 200);
     }
 }
 

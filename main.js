@@ -93,6 +93,12 @@ renderer.setAnimationLoop(animate);
 window.addEventListener("click", onClick);
 
 
+//increse focal length and move back
+// how to implement if it hit anything other than a sphere
+// generate static boundingbox for each thing that is not a sphere? and compute bounding box and check intersection
+
+// should we be making it into a parallel projection?
+
 // TODO:
 // add point system on sphere
 // remove bullets when they hit other objects not targets?
@@ -110,6 +116,8 @@ window.addEventListener("click", onClick);
 // randomness aspect to the game
 // replay screen or termination screen
 // computer vision
+// depth perception, add shaders or other elements in background
+// curtain close for game end
 
 
 // Feedback:
