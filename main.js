@@ -3,7 +3,7 @@ import { createScene } from './scene.js';
 import { checkCollision } from './utils/util.js';
 import { shootDart } from './models/Dart.js';
 import { setHud } from './hud.js';
-import { HillPath, AerialPath} from './models/Path.js';
+import { HillPath, AerialPath, CurvedPath} from './models/Path.js';
 
 // testing purposes
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -25,6 +25,8 @@ if (editMode) {
 
 const hill = new HillPath(scene, -30, -10, 1.0, targets);
 const aerial = new AerialPath(scene, -30, -13, 1.0, targets, true);
+const left_curved = new CurvedPath(scene, -30, -5, 1.0, targets, false);
+const right_curved = new CurvedPath(scene, -30, -5, 1.0, targets, false, true);
 
 // Animation and clock
 let animation_time = 0;
@@ -82,12 +84,15 @@ window.addEventListener("click", onClick);
 
 
 // TODO:
+// Use frustum culling technique
+// Plan scene and terminating condition
+// Add background props and material
 // offset to the paths
 // performance when too many objects -> lag -> unexpected behavior
+// gravity
 // dart minimizes too quickly
 // change gun to a blaster
-// find other models for targets
+// texture map the mountain and spheres
 // implement gravity for projectiles
     // implement balls disappear after falling down?
     // implement balls bouncing off objects
-// change transformation instead of steady stream

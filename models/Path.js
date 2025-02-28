@@ -3,13 +3,14 @@ import { createSphere } from './Sphere';
 import { translationMatrix, rotationMatrixZ } from '../utils/transform';
 
 class PathObject {
-    constructor(scene, startX, depth, scale, targets, drawBackdrop = true, reverse = false) {
+    constructor(scene, startX, depth, scale, targets, drawBackdrop = true, reverse = false, mirror = false) {
         this.scene = scene;
         this.startX = startX;
         this.depth = depth;
         this.scale = scale;
         this.targets = targets;
         this.direction = !reverse ? 1 : -1;
+        this.mirror = mirror;
         this.pathPoints = this.createPath();
         if (drawBackdrop) this.createBackdrop();
         this.streamObjects();
@@ -41,7 +42,7 @@ class PathObject {
         this.scene.add(backdropMesh);
     }
 
-    createObject(){
+    createObject() {
         return createSphere(this.scene);
     }
 
@@ -54,18 +55,15 @@ class PathObject {
             const nextIndex = positionIndex + this.direction * speed;
 
             if (nextIndex >= 0 && nextIndex < this.pathPoints.length - 1) {
-                let x1 = this.pathPoints[Math.floor(positionIndex)].x;
-                let y1 = this.pathPoints[Math.floor(positionIndex)].y;
-                let x2 = this.pathPoints[Math.ceil(positionIndex)].x;
-                let y2 = this.pathPoints[Math.ceil(positionIndex)].y;
+                let p1 = this.pathPoints[Math.floor(positionIndex)];
+                let p2 = this.pathPoints[Math.ceil(positionIndex)];
 
-                // Linear interpolation between two hill points for smooth movement
                 let t = positionIndex % 1;
-                let x = x1 * (1 - t) + x2 * t;
-                let y = y1 * (1 - t) + y2 * t;
+                let x = p1.x * (1 - t) + p2.x * t;
+                let y = p1.y * (1 - t) + p2.y * t;
+                let z = p1.z * (1 - t) + p2.z * t;
 
-                object.matrix.copy(translationMatrix(x, y + 1, this.depth)); // Adjust z-depth
-                object.matrix.multiply(rotationMatrixZ(Math.atan2(y2 - y1, x2 - x1))); // Rotate sphere along slope
+                object.matrix.copy(translationMatrix(x, y + 1, z));
 
                 positionIndex = nextIndex;
                 requestAnimationFrame(move);
@@ -91,7 +89,7 @@ class PathObject {
     }
 }
 
-class HillPath extends PathObject{
+class HillPath extends PathObject {
     createPath() {
         const width = 60; // Smoother curve
         const heightFactor = 1.5; // Gentle slopes
@@ -100,8 +98,9 @@ class HillPath extends PathObject{
         for (let x = 0; x <= width; x += 1) {
             let y = heightFactor * (Math.sin(x * 0.2) * 1.2 + Math.cos(x * 0.08) * 1.5 + Math.sin(x * 0.04) * 1) + 4;
             y *= 0.5 + (0.5 * (Math.cos((x / width) * Math.PI) ** 2)); // Smoothing
+            let z = this.depth;
 
-            hillPoints.push({ x: x + this.startX, y });
+            hillPoints.push({ x: x + this.startX, y, z });
         }
 
         return hillPoints;
@@ -116,10 +115,36 @@ class AerialPath extends PathObject {
     createPath() {
         let points = [];
         for (let i = 0; i <= 50; i += 1) {
-            points.push({ x: this.startX + i, y: 10 + Math.sin(i * 0.2) * 3 });
+            points.push({ x: this.startX + i, y: 10 + Math.sin(i * 0.2) * 3, z: this.depth });
         }
         return points;
     }
 }
 
-export { HillPath, AerialPath };
+class CurvedPath extends PathObject {
+    constructor(scene, startX, depth, scale, targets, reverse, mirror = false) {
+        super(scene, startX, depth, scale, targets, false, reverse, mirror);
+    }
+    createPath() {
+        let points = [];
+        const straightXLength = 25; 
+        const straightZLength = 40; 
+        const mirrorMultiplier = this.mirror ? -1 : 1;
+        const startXCoord = mirrorMultiplier * this.startX;
+
+        // Move straight along +X
+        for (let i = 0; i < straightXLength; i++) {
+            points.push({ x: startXCoord + i * mirrorMultiplier, y: 0, z: this.depth });
+        }
+
+        const finalX = startXCoord + straightXLength * mirrorMultiplier;
+
+        for (let i = 0; i < straightZLength; i++) {
+            points.push({ x: finalX, y: 0, z: this.depth + i });
+        }
+
+        return points;
+    }
+}
+
+export { HillPath, AerialPath, CurvedPath };
