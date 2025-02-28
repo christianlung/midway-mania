@@ -69,6 +69,7 @@ class PathObject {
                 requestAnimationFrame(move);
             } else {
                 if (object.parent) { // Ensure it's still in the scene
+                    console.log("Sphere removed");
                     this.scene.remove(object);
                     const index = this.targets.indexOf(object);
                     if (index !== -1) this.targets.splice(index, 1);
@@ -128,7 +129,7 @@ class CurvedPath extends PathObject {
     createPath() {
         let points = [];
         const straightXLength = 25; 
-        const straightZLength = 40; 
+        const straightZLength = 10; 
         const mirrorMultiplier = this.mirror ? -1 : 1;
         const startXCoord = mirrorMultiplier * this.startX;
 
