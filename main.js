@@ -4,6 +4,7 @@ import { checkCollision } from './utils/util.js';
 import { shootDart } from './models/Dart.js';
 import { setHud } from './hud.js';
 import { HillPath, AerialPath, CurvedPath } from './models/Path.js';
+import { createBackdrop } from './models/Backdrop.js';
 
 // testing purposes
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -13,6 +14,7 @@ const editMode = false;
 let targets = [];
 let projectiles = [];
 let points = 0;
+const Z_FURTHEST = -20;
 
 const { scene, camera, renderer } = createScene();
 const pointsCounter = setHud(renderer);
@@ -23,10 +25,11 @@ if (editMode) {
     controls.update();
 }
 
-const hill = new HillPath(scene, -30, -10, 1.0, targets);
-// const aerial = new AerialPath(scene, -30, -13, 1.0, targets, true);
-// const left_curved = new CurvedPath(scene, -30, -5, 1.0, targets, false);
-// const right_curved = new CurvedPath(scene, -30, -5, 1.0, targets, false, true);
+const hillPath = new HillPath(scene, -30, -10, targets);
+createBackdrop(scene, hillPath.pathPoints, hillPath.depth);
+const aerialPath = new AerialPath(scene, -30, -13, targets, true);
+const left_curvedPath = new CurvedPath(scene, -30, -5, targets);
+const right_curvedPath = new CurvedPath(scene, -30, -5, targets, false, true);
 
 // Animation and clock
 let animation_time = 0;
@@ -59,6 +62,12 @@ function animate() {
         let dart = projectiles[dartIndex];
         dart.position.add(dart.userData.velocity.clone().multiplyScalar(5 * delta_animation_time));
 
+        if (dart.position.z < Z_FURTHEST) {
+            scene.remove(dart);
+            projectiles.splice(dartIndex, 1);
+            console.log("Dart removed for passing the static z threshold");
+        }
+
         // Iterate backwards over targets
         for (let sphereIndex = targets.length - 1; sphereIndex >= 0; sphereIndex--) {
             let sphere = targets[sphereIndex];
@@ -85,12 +94,9 @@ window.addEventListener("click", onClick);
 
 // TODO:
 // add point system on sphere
-// performance when too many objects -> lag -> unexpected behavior
-// remove bullets when they reach a certain distance
-// remove bullets when they hit other objects not targets
+// remove bullets when they hit other objects not targets?
 // terminating condition
 // Add background props and material
-// offset to the paths
 // gravity
 // dart minimizes too quickly
 // change gun to a blaster
@@ -98,5 +104,3 @@ window.addEventListener("click", onClick);
 // implement gravity for projectiles
 // implement balls disappear after falling down?
 // implement balls bouncing off objects
-
-// spheres are properly removed from paths

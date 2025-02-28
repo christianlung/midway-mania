@@ -3,43 +3,19 @@ import { createSphere } from './Sphere';
 import { translationMatrix, rotationMatrixZ } from '../utils/transform';
 
 class PathObject {
-    constructor(scene, startX, depth, scale, targets, drawBackdrop = true, reverse = false, mirror = false) {
+    constructor(scene, startX, depth, targets, reverse = false, mirror = false) {
         this.scene = scene;
         this.startX = startX;
         this.depth = depth;
-        this.scale = scale;
         this.targets = targets;
         this.direction = !reverse ? 1 : -1;
         this.mirror = mirror;
         this.pathPoints = this.createPath();
-        if (drawBackdrop) this.createBackdrop();
         this.streamObjects();
     }
 
     createPath() {
         throw new Error("createPath() must be implemented in subclass");
-    }
-
-    createBackdrop() {
-        const shape = new THREE.Shape();
-        shape.moveTo(this.pathPoints[0].x, 0);
-
-        this.pathPoints.forEach(({ x, y }) => {
-            shape.lineTo(x, y);
-        });
-
-        shape.lineTo(this.pathPoints[this.pathPoints.length - 1].x, 0);
-        shape.lineTo(this.pathPoints[0].x, 0);
-
-        const extrudeSettings = { depth: 0.5, bevelEnabled: false };
-        const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-        const material = new THREE.MeshStandardMaterial({ color: 0x8B4513, flatShading: true });
-
-        const backdropMesh = new THREE.Mesh(geometry, material);
-        backdropMesh.position.set(0, 0, this.depth);
-        backdropMesh.scale.set(this.scale, this.scale, this.scale);
-
-        this.scene.add(backdropMesh);
     }
 
     createObject() {
@@ -109,8 +85,8 @@ class HillPath extends PathObject {
 }
 
 class AerialPath extends PathObject {
-    constructor(scene, startX, depth, scale, targets, reverse) {
-        super(scene, startX, depth, scale, targets, false, reverse);
+    constructor(scene, startX, depth, targets, reverse) {
+        super(scene, startX, depth, targets, false, reverse);
     }
 
     createPath() {
@@ -123,8 +99,8 @@ class AerialPath extends PathObject {
 }
 
 class CurvedPath extends PathObject {
-    constructor(scene, startX, depth, scale, targets, reverse, mirror = false) {
-        super(scene, startX, depth, scale, targets, false, reverse, mirror);
+    constructor(scene, startX, depth, targets, reverse, mirror = false) {
+        super(scene, startX, depth, targets, false, reverse, mirror);
     }
     createPath() {
         let points = [];

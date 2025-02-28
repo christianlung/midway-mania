@@ -60,3 +60,24 @@ export function addMountains(scene) {
         createJaggedBackdrop(scene, startX, depth, scale);
     });
 }
+
+export function createBackdrop(scene, pathPoints, depth) {
+    const shape = new THREE.Shape();
+    shape.moveTo(pathPoints[0].x, 0);
+
+    pathPoints.forEach(({ x, y }) => {
+        shape.lineTo(x, y);
+    });
+
+    shape.lineTo(pathPoints[pathPoints.length - 1].x, 0);
+    shape.lineTo(pathPoints[0].x, 0);
+
+    const extrudeSettings = { depth: 0.5, bevelEnabled: false };
+    const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+    const material = new THREE.MeshStandardMaterial({ color: 0x8B4513, flatShading: true });
+
+    const backdropMesh = new THREE.Mesh(geometry, material);
+    backdropMesh.position.set(0, 0, depth);
+
+    scene.add(backdropMesh);
+}
