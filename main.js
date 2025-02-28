@@ -66,6 +66,7 @@ function animate() {
             scene.remove(dart);
             projectiles.splice(dartIndex, 1);
             console.log("Dart removed for passing the static z threshold");
+            continue;
         }
 
         // Iterate backwards over targets
@@ -104,3 +105,18 @@ window.addEventListener("click", onClick);
 // implement gravity for projectiles
 // implement balls disappear after falling down?
 // implement balls bouncing off objects
+// fast moving ball/bird in the air
+    // maybe have things pop up at random times
+// randomness aspect to the game
+// replay screen or termination screen
+// computer vision
+
+
+// Feedback:
+// targets more than one shot to destroy
+// target collision animation
+// other models for targets
+// reload? differs from ride
+// make it into a midway mania theme?
+// levels
+// accuracy tracker?
