@@ -15,6 +15,7 @@ let targets = [];
 let projectiles = [];
 let points = 0;
 const Z_FURTHEST = -20;
+const GAMETIMER = 30000; // milliseconds
 
 const { scene, camera, renderer } = createScene();
 const pointsCounter = setHud(renderer);
@@ -49,7 +50,11 @@ function onClick(event) {
     shootDart(camera, scene, raycaster, 10, projectiles);
 }
 
+let running = true;
+
 function animate() {
+    if (!running) return;
+
     renderer.render(scene, camera);
     if (editMode) {
         controls.update();
@@ -92,39 +97,50 @@ function animate() {
 renderer.setAnimationLoop(animate);
 window.addEventListener("click", onClick);
 
+setTimeout(() => {
+    startGameStopAnimation();
+    running = false; // halt the animation loop
+}, GAMETIMER);
 
-//increse focal length and move back
-// how to implement if it hit anything other than a sphere
-// generate static boundingbox for each thing that is not a sphere? and compute bounding box and check intersection
+function startGameStopAnimation() {
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'black';
+    overlay.style.opacity = '0';
+    overlay.style.transition = 'opacity 3s ease';
+    overlay.style.pointerEvents = 'none';
+    document.body.appendChild(overlay);
 
-// should we be making it into a parallel projection?
+    requestAnimationFrame(() => {
+        overlay.style.opacity = '1';
+    });
+}
+
+
 
 // TODO:
-// add point system on sphere
-// remove bullets when they hit other objects not targets?
-// terminating condition
+// fix point system positioning on sphere
+// terminating condition: curtain close for game end, add countdown, replay screen or termination screen
 // Add background props and material
-// gravity
+// depth perception, add shaders or other elements in background
 // dart minimizes too quickly
-// change gun to a blaster
-// texture map the mountain and spheres
-// implement gravity for projectiles
-// implement balls disappear after falling down?
+// change gun to a blaster, reticle preferred to be two concentric circles or red color
+// implement gravity for projectiles, balls disappear after falling down?
 // implement balls bouncing off objects
 // fast moving ball/bird in the air
-    // maybe have things pop up at random times
+// maybe have things pop up at random times
 // randomness aspect to the game
-// replay screen or termination screen
 // computer vision
-// depth perception, add shaders or other elements in background
-// curtain close for game end
+// reload?
 
 
 // Feedback:
 // targets more than one shot to destroy
 // target collision animation
 // other models for targets
-// reload? differs from ride
 // make it into a midway mania theme?
-// levels
 // accuracy tracker?
