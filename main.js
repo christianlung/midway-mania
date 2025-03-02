@@ -3,7 +3,7 @@ import { createScene } from './scene.js';
 import { checkCollision } from './utils/util.js';
 import { shootDart } from './models/Dart.js';
 import { setHud } from './hud.js';
-import { HillPath, AerialPath, CurvedPath } from './models/Path.js';
+import { HillPath, AerialPath, CurvedPath, FastPath } from './models/Path.js';
 import { createBackdrop } from './models/Backdrop.js';
 
 // Scene Setup
@@ -15,13 +15,14 @@ let targets = [];
 let projectiles = [];
 let points = 0;
 const Z_FURTHEST = -20;
-const GAMETIMER = 30000; // milliseconds
+const GAMETIMER = 60000; // milliseconds
 
 // Sphere Paths
 const hillPath = new HillPath(scene, -30, -10, targets);
 const aerialPath = new AerialPath(scene, -30, -13, targets, true);
 const left_curvedPath = new CurvedPath(scene, -30, -5, targets);
 const right_curvedPath = new CurvedPath(scene, -30, -5, targets, false, true);
+const fastPath = new FastPath(scene, -30, -13, targets);
 
 // Static Objects
 createBackdrop(scene, hillPath.pathPoints, hillPath.depth);
@@ -119,7 +120,7 @@ setTimeout(() => {
 //////////////
 
 /*
-change speed of objects, add fast moving ball/bird in the air
+layout, too many balls right now (maybe have hill spheres pause when it reaches the maximum, then continues)
 fix point system positioning on sphere
 terminating condition: curtain close for game end, add countdown, replay screen or termination screen
 */

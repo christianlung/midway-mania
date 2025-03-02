@@ -2,11 +2,14 @@ import { createSphere } from './Sphere';
 import { translationMatrix, rotationMatrixZ } from '../utils/transform';
 
 class PathObject {
-    constructor(scene, startX, depth, targets, reverse = false, mirror = false) {
+    constructor(scene, startX, depth, targets, speed = 0.05, interval = 3000, points = 100, reverse = false, mirror = false) {
         this.scene = scene;
         this.startX = startX;
         this.depth = depth;
         this.targets = targets;
+        this.speed = speed;
+        this.interval = interval;
+        this.points = points;
         this.direction = !reverse ? 1 : -1;
         this.mirror = mirror;
         this.pathPoints = this.createPath();
@@ -18,16 +21,16 @@ class PathObject {
     }
 
     createObject() {
-        return createSphere(this.scene);
+        return createSphere(this.scene, this.points);
     }
 
-    animateObject(object, speed = 0.05) {
+    animateObject(object) {
         let positionIndex = this.direction === 1 ? 0 : this.pathPoints.length - 1;
 
         const move = () => {
             if (!this.scene || !object.parent) return;
 
-            const nextIndex = positionIndex + this.direction * speed;
+            const nextIndex = positionIndex + this.direction * this.speed;
 
             if (nextIndex >= 0 && nextIndex < this.pathPoints.length - 1) {
                 let p1 = this.pathPoints[Math.floor(positionIndex)];
@@ -61,7 +64,7 @@ class PathObject {
             const object = this.createObject(); // Must be implemented in subclass
             this.targets.push(object);
             this.animateObject(object);
-        }, 3000);
+        }, this.interval);
     }
 }
 
@@ -85,7 +88,7 @@ class HillPath extends PathObject {
 
 class AerialPath extends PathObject {
     constructor(scene, startX, depth, targets, reverse) {
-        super(scene, startX, depth, targets, reverse);
+        super(scene, startX, depth, targets, 0.05, 6000, 200, reverse);
     }
 
     createPath() {
@@ -95,15 +98,11 @@ class AerialPath extends PathObject {
         }
         return points;
     }
-
-    createObject() {
-        return createSphere(this.scene, 200);
-    }
 }
 
 class CurvedPath extends PathObject {
     constructor(scene, startX, depth, targets, reverse, mirror) {
-        super(scene, startX, depth, targets, reverse, mirror);
+        super(scene, startX, depth, targets, 0.03, 3000, 100, reverse, mirror);
     }
     createPath() {
         let points = [];
@@ -127,4 +126,19 @@ class CurvedPath extends PathObject {
     }
 }
 
-export { HillPath, AerialPath, CurvedPath };
+class FastPath extends PathObject {
+    constructor(scene, startX, depth, targets, reverse, mirror) {
+        super(scene, startX, depth, targets, 0.1, 10000, 1000, reverse, mirror);
+    }
+
+    createPath(){
+        let points = []
+        for (let i = 0; i < 60; i++){
+            points.push({ x: this.startX + i, y: 18, z: this.depth});
+        }
+
+        return points;
+    }
+}
+
+export { HillPath, AerialPath, CurvedPath, FastPath };
