@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { context } from 'three/tsl';
 
 const geometry = new THREE.SphereGeometry(1, 32, 32);
 
@@ -54,13 +55,16 @@ function createLabelSprite(text) {
     canvas.width = size;
     canvas.height = size;
 
+
     const context = canvas.getContext('2d');
     context.clearRect(0, 0, size, size);
     context.font = 'Bold 48px Arial';
-    context.fillStyle = 'black';
     context.textAlign = 'center';
     context.textBaseline = 'middle';
+    context.fillStyle = 'black';
     context.fillText(text, size / 2, size / 2);
+    context.lineWidth = 4;
+    context.strokeText(text, size / 2, size / 2);
 
     const texture = new THREE.CanvasTexture(canvas);
     texture.needsUpdate = true;
@@ -70,54 +74,37 @@ function createLabelSprite(text) {
 
     sprite.center.set(0.5, 0.5);
 
-    sprite.scale.set(3, 3, 1);
+    sprite.scale.set(3.5, 3.5, 1);
 
     return sprite;
 }
 
-let explosionTemplate = null;
-const numExplosionParticles = 10;
-const explosionGeometry = new THREE.SphereGeometry(0.05, 8, 8);
-const explosionMaterial = new THREE.MeshBasicMaterial({ color: 0xFFDE00 });
-
-export function explodeAndRemove(scene, sphere, duration = 750) {
-  // Get the sphere's world position.
-  const worldPos = new THREE.Vector3();
-  sphere.getWorldPosition(worldPos);
+export function explodeAndRemove(scene, sphere, flickerColor = 0xffffff, duration = 500) {
+    // Clone the material to prevent affecting all spheres
+    const originalMaterial = sphere.material;
+    sphere.material = originalMaterial.clone(); 
   
-  if (!explosionTemplate) {
-    explosionTemplate = [];
-    for (let i = 0; i < numExplosionParticles; i++) {
-      explosionTemplate.push(new THREE.Vector3(
-        (Math.random() - 0.5) * 2,
-        (Math.random() - 0.5) * 2,
-        (Math.random() - 0.5) * 2
-      ));
+    const originalColor = sphere.material.color.getHex(); 
+    let elapsed = 0;
+    const interval = 100; // Time per flicker in milliseconds
+    let flickerState = false; 
+  
+    function animateFlicker() {
+      if (elapsed < duration) {
+        // Toggle between the original and flicker color
+        sphere.material.color.setHex(flickerState ? originalColor : flickerColor);
+        flickerState = !flickerState;
+  
+        elapsed += interval;
+        setTimeout(animateFlicker, interval);
+      } else {
+        // Remove sphere and dispose of the cloned material
+        scene.remove(sphere);
+        sphere.material.dispose();
+      }
     }
+  
+    animateFlicker();
   }
   
-  const particles = new THREE.Group();
-  for (let i = 0; i < numExplosionParticles; i++) {
-    const particle = new THREE.Mesh(explosionGeometry, explosionMaterial);
-    particle.position.copy(worldPos);
-    particle.userData.velocity = explosionTemplate[i].clone();
-    particles.add(particle);
-  }
   
-  scene.add(particles);
-  scene.remove(sphere);
-  
-  const startTime = performance.now();
-  function animate() {
-    const elapsed = performance.now() - startTime;
-    particles.children.forEach(particle => {
-      particle.position.add(particle.userData.velocity.clone().multiplyScalar(0.02));
-    });
-    if (elapsed < duration) {
-      requestAnimationFrame(animate);
-    } else {
-      scene.remove(particles);
-    }
-  }
-  animate();
-}

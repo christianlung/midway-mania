@@ -114,7 +114,6 @@ function animate() {
                 pointsCounter.textContent = `Points: ${points}`;
 
                 // Remove sphere and dart
-                // scene.remove(sphere);
                 explodeAndRemove(scene, sphere);
                 targets.splice(sphereIndex, 1);
 
@@ -147,7 +146,6 @@ layout
 during end screen, add some toy story characters waving next to play again button
 sphere styling: blue band, better point styling
 background styling (mountains, add trees?)
-sphere on death animation optimization
 game end: countdown timer somewhere, curtain close animation, replay screen
 */
 
