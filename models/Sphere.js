@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { context } from 'three/tsl';
 
 const geometry = new THREE.SphereGeometry(1, 32, 32);
 
@@ -45,6 +44,14 @@ export function createSphere(scene, points = 100) {
     const starMesh = new THREE.Mesh(starGeometry, starMaterial);
     starMesh.position.set(0, 0, 1);
     sphere.add(starMesh);
+
+    const bandGeometry = new THREE.CylinderGeometry(1.02, 1.02, 0.4, 64);
+    const bandMaterial = new THREE.MeshPhongMaterial({ color: 0x0000FF, side: THREE.DoubleSide });
+    const bandMesh = new THREE.Mesh(bandGeometry, bandMaterial);
+
+    bandMesh.rotation.x = Math.PI / 2; 
+    sphere.add(bandMesh);
+
 
     return sphere;
 }

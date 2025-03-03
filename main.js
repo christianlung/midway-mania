@@ -173,7 +173,6 @@ setTimeout(() => {
 /*
 layout
 during end screen, add some toy story characters waving next to play again button
-sphere styling: blue band, better point styling
 background styling (mountains, add trees?)
 game end: countdown timer somewhere, curtain close animation, replay screen
 */
