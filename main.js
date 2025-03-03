@@ -125,6 +125,35 @@ function animate() {
     }
 }
 
+export function addTimerElement() {
+    const timerDiv = document.createElement('div');
+    timerDiv.style.position = 'absolute';
+    timerDiv.style.top = '10px';
+    timerDiv.style.left = '10px';
+    timerDiv.style.color = 'white';
+    timerDiv.style.fontSize = '20px';
+    timerDiv.style.fontFamily = 'Arial, sans-serif';
+    timerDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    timerDiv.style.padding = '5px';
+    timerDiv.textContent = 'Time: 60'; // initial text, e.g. 60 seconds
+    document.body.appendChild(timerDiv);
+    return timerDiv;
+}
+const timerDiv = addTimerElement(); // create the timer
+let remainingTime = 60; // In seconds (or however long your game is)
+
+// Update the timer text once per second
+const countdownInterval = setInterval(() => {
+    remainingTime--;
+    timerDiv.textContent = `Time: ${remainingTime}`;
+
+    if (remainingTime <= 0) {
+        clearInterval(countdownInterval);
+        // Handle game end logic here if you want,
+        // or rely on your existing setTimeout logic.
+    }
+}, 1000);
+
 renderer.setAnimationLoop(animate);
 window.addEventListener("click", onClick);
 
