@@ -78,7 +78,19 @@ function addGun() {
       });
 }
 
-
-
+export function addTimerElement(seconds) {
+    const timerDiv = document.createElement('div');
+    timerDiv.style.position = 'absolute';
+    timerDiv.style.top = '10px';
+    timerDiv.style.left = '10px';
+    timerDiv.style.color = 'white';
+    timerDiv.style.fontSize = '20px';
+    timerDiv.style.fontFamily = 'Arial, sans-serif';
+    timerDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    timerDiv.style.padding = '5px';
+    timerDiv.textContent = `Time: ${seconds}`;
+    document.body.appendChild(timerDiv);
+    return timerDiv;
+}
 
 
