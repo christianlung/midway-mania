@@ -119,11 +119,10 @@ setTimeout(() => {
 // Priority //
 //////////////
 
-// change point color to be more visible
-
 /*
 layout
-fix point system positioning on sphere
+sphere styling: blue band, better point styling
+background styling (mountains, add trees?)
 terminating condition: curtain close for game end, add countdown, replay screen or termination screen
 */
 
