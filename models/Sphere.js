@@ -74,3 +74,50 @@ function createLabelSprite(text) {
 
     return sprite;
 }
+
+let explosionTemplate = null;
+const numExplosionParticles = 10;
+const explosionGeometry = new THREE.SphereGeometry(0.05, 8, 8);
+const explosionMaterial = new THREE.MeshBasicMaterial({ color: 0xFFDE00 });
+
+export function explodeAndRemove(scene, sphere, duration = 750) {
+  // Get the sphere's world position.
+  const worldPos = new THREE.Vector3();
+  sphere.getWorldPosition(worldPos);
+  
+  if (!explosionTemplate) {
+    explosionTemplate = [];
+    for (let i = 0; i < numExplosionParticles; i++) {
+      explosionTemplate.push(new THREE.Vector3(
+        (Math.random() - 0.5) * 2,
+        (Math.random() - 0.5) * 2,
+        (Math.random() - 0.5) * 2
+      ));
+    }
+  }
+  
+  const particles = new THREE.Group();
+  for (let i = 0; i < numExplosionParticles; i++) {
+    const particle = new THREE.Mesh(explosionGeometry, explosionMaterial);
+    particle.position.copy(worldPos);
+    particle.userData.velocity = explosionTemplate[i].clone();
+    particles.add(particle);
+  }
+  
+  scene.add(particles);
+  scene.remove(sphere);
+  
+  const startTime = performance.now();
+  function animate() {
+    const elapsed = performance.now() - startTime;
+    particles.children.forEach(particle => {
+      particle.position.add(particle.userData.velocity.clone().multiplyScalar(0.02));
+    });
+    if (elapsed < duration) {
+      requestAnimationFrame(animate);
+    } else {
+      scene.remove(particles);
+    }
+  }
+  animate();
+}

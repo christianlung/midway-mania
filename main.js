@@ -5,6 +5,7 @@ import { shootDart } from './models/Dart.js';
 import { setHud } from './hud.js';
 import { HillPath, AerialPath, CurvedPath, FastPath } from './models/Path.js';
 import { createBackdrop } from './models/Backdrop.js';
+import { explodeAndRemove } from './models/Sphere.js';
 
 // Scene Setup
 const { scene, camera, renderer } = createScene();
@@ -113,7 +114,8 @@ function animate() {
                 pointsCounter.textContent = `Points: ${points}`;
 
                 // Remove sphere and dart
-                scene.remove(sphere);
+                // scene.remove(sphere);
+                explodeAndRemove(scene, sphere);
                 targets.splice(sphereIndex, 1);
 
                 scene.remove(dart);
@@ -145,7 +147,7 @@ layout
 during end screen, add some toy story characters waving next to play again button
 sphere styling: blue band, better point styling
 background styling (mountains, add trees?)
-sphere on death animation
+sphere on death animation optimization
 game end: countdown timer somewhere, curtain close animation, replay screen
 */
 
