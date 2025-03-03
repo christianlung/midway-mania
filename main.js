@@ -61,6 +61,27 @@ function startGameStopAnimation() {
     requestAnimationFrame(() => {
         overlay.style.opacity = '1';
     });
+
+    setTimeout(() => {
+        overlay.style.pointerEvents = 'auto'; 
+    
+        // Create the Play Again button
+        const playAgainButton = document.createElement('button');
+        playAgainButton.textContent = 'Play Again';
+        playAgainButton.style.position = 'absolute';
+        playAgainButton.style.top = '50%';
+        playAgainButton.style.left = '50%';
+        playAgainButton.style.transform = 'translate(-50%, -50%)';
+        playAgainButton.style.padding = '15px 30px';
+        playAgainButton.style.fontSize = '20px';
+        playAgainButton.style.cursor = 'pointer';
+        overlay.appendChild(playAgainButton);
+    
+        // On click, reload the page to restart the game.
+        playAgainButton.addEventListener('click', () => {
+          window.location.reload();
+        });
+      }, 3000); 
 }
 
 
@@ -121,9 +142,11 @@ setTimeout(() => {
 
 /*
 layout
+during end screen, add some toy story characters waving next to play again button
 sphere styling: blue band, better point styling
 background styling (mountains, add trees?)
-terminating condition: curtain close for game end, add countdown, replay screen or termination screen
+sphere on death animation
+game end: countdown timer somewhere, curtain close animation, replay screen
 */
 
 ///////////////
