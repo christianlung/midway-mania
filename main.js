@@ -119,8 +119,10 @@ setTimeout(() => {
 // Priority //
 //////////////
 
+// change point color to be more visible
+
 /*
-layout, too many balls right now (maybe have hill spheres pause when it reaches the maximum, then continues)
+layout
 fix point system positioning on sphere
 terminating condition: curtain close for game end, add countdown, replay screen or termination screen
 */

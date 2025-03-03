@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { createSphere } from './Sphere';
 import { translationMatrix, rotationMatrixZ } from '../utils/transform';
 
@@ -12,6 +13,7 @@ class PathObject {
         this.points = points;
         this.direction = !reverse ? 1 : -1;
         this.mirror = mirror;
+        this.freeze = false;
         this.pathPoints = this.createPath();
         this.streamObjects();
     }
@@ -30,6 +32,11 @@ class PathObject {
         const move = () => {
             if (!this.scene || !object.parent) return;
 
+            if (this.freeze) {
+                requestAnimationFrame(move);
+                return;
+            }
+
             const nextIndex = positionIndex + this.direction * this.speed;
 
             if (nextIndex >= 0 && nextIndex < this.pathPoints.length - 1) {
@@ -47,7 +54,6 @@ class PathObject {
                 requestAnimationFrame(move);
             } else {
                 if (object.parent) { // Ensure it's still in the scene
-                    console.log("Sphere removed");
                     this.scene.remove(object);
                     const index = this.targets.indexOf(object);
                     if (index !== -1) this.targets.splice(index, 1);
@@ -61,6 +67,7 @@ class PathObject {
 
     streamObjects() {
         setInterval(() => {
+            if (this.freeze) return;
             const object = this.createObject(); // Must be implemented in subclass
             this.targets.push(object);
             this.animateObject(object);
@@ -68,10 +75,27 @@ class PathObject {
     }
 }
 
+// TODO: make sure it stops at every cycle?
 class HillPath extends PathObject {
+    constructor(scene, startX, depth, targets, speed = 0.05, interval = 3000, points = 100, reverse = false, mirror = false) {
+        super(scene, startX, depth, targets, speed, interval, points, reverse, mirror);
+        
+        this.pauseDuration = 5000; // Duration (in ms) to freeze movement every cycle.
+        this.cycleDuration = 21000; // Cycle duration (in ms) between freezes.
+
+        setInterval(() => {
+            console.log("Pausing movement for 5 seconds");
+            this.freeze = true;
+            setTimeout(() => {
+                this.freeze = false;
+                console.log("Resuming movement");
+            }, this.pauseDuration);
+        }, this.cycleDuration);
+    }
+
     createPath() {
-        const width = 60; // Smoother curve
-        const heightFactor = 1.5; // Gentle slopes
+        const width = 60;
+        const heightFactor = 1.5;
         let hillPoints = [];
 
         for (let x = 0; x <= width; x += 1) {
@@ -84,6 +108,7 @@ class HillPath extends PathObject {
 
         return hillPoints;
     }
+
 }
 
 class AerialPath extends PathObject {
@@ -106,8 +131,8 @@ class CurvedPath extends PathObject {
     }
     createPath() {
         let points = [];
-        const straightXLength = 25; 
-        const straightZLength = 10; 
+        const straightXLength = 25;
+        const straightZLength = 10;
         const mirrorMultiplier = this.mirror ? -1 : 1;
         const startXCoord = mirrorMultiplier * this.startX;
 
@@ -131,10 +156,10 @@ class FastPath extends PathObject {
         super(scene, startX, depth, targets, 0.1, 10000, 1000, reverse, mirror);
     }
 
-    createPath(){
+    createPath() {
         let points = []
-        for (let i = 0; i < 60; i++){
-            points.push({ x: this.startX + i, y: 18, z: this.depth});
+        for (let i = 0; i < 60; i++) {
+            points.push({ x: this.startX + i, y: 18, z: this.depth });
         }
 
         return points;
