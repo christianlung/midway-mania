@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { XAxis, YAxis, ZAxis } from './models/Axis.js';
 import { createGround } from './models/Ground.js';
 import { addMountains } from './models/Backdrop.js';
 
@@ -28,9 +27,6 @@ export function createScene() {
 
     // Static background
     createGround(scene);
-    XAxis(scene);
-    YAxis(scene);
-    ZAxis(scene);
     addMountains(scene);
 
     return { scene, camera, renderer };
