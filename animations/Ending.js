@@ -1,30 +1,42 @@
 const transitionSeconds = 2;
 
 function showCurtainAnimation(callback) {
-    const createCurtain = (side, startPos) => {
+    const createCurtain = (side, startPos, transformOrigin) => {
         const curtain = document.createElement('div');
         Object.assign(curtain.style, {
             position: 'fixed',
             top: '0',
-            [side]: startPos,
+            [side]: startPos, // Start fully off-screen
             width: '50%',
             height: '100%',
             backgroundColor: 'red',
-            transition: `all ${transitionSeconds}s ease`,
+            backgroundImage: 'linear-gradient(90deg, rgba(0, 0, 0, 0.1) 5%, rgba(255, 255, 255, 0.05) 50%, rgba(0, 0, 0, 0.1) 95%)',
+            backgroundSize: '20px 100%',
+            transition: `left ${transitionSeconds}s ease, right ${transitionSeconds}s ease, transform 0.2s ease-in-out`,
+            transformOrigin: transformOrigin, // Ensures only the center bounces
         });
         document.body.appendChild(curtain);
         return curtain;
     };
 
-    const leftCurtain = createCurtain('left', '-50%');
-    const rightCurtain = createCurtain('right', '-50%');
+    const leftCurtain = createCurtain('left', '-50%', 'right'); 
+    const rightCurtain = createCurtain('right', '-50%', 'left'); 
 
     requestAnimationFrame(() => {
         leftCurtain.style.left = '0';
         rightCurtain.style.right = '0';
     });
 
-    setTimeout(callback, transitionSeconds * 1000);
+    setTimeout(() => {
+        leftCurtain.style.transform = 'scaleX(1.02)'; // Slight stretch inward at the center
+        rightCurtain.style.transform = 'scaleX(1.02)';
+
+        setTimeout(() => {
+            leftCurtain.style.transform = 'scaleX(1)'; // Snap back to normal
+            rightCurtain.style.transform = 'scaleX(1)';
+            callback();
+        }, 200);
+    }, transitionSeconds * 1000);
 }
 
 function showGameOverScreen(points) {
