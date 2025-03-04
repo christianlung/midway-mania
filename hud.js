@@ -33,16 +33,16 @@ function addReticle() {
     reticle.style.height = '20px';
     reticle.style.pointerEvents = 'none';
     // Add a circular border to create a circle around the reticle
-    reticle.style.border = '2px solid white';
+    reticle.style.border = '3px solid red';
     reticle.style.borderRadius = '50%';
     document.body.appendChild(reticle);
 
     // Horizontal line
     const horizontalLine = document.createElement('div');
     horizontalLine.style.position = 'absolute';
-    horizontalLine.style.backgroundColor = 'white';
+    horizontalLine.style.backgroundColor = 'red';
     horizontalLine.style.width = '100%';
-    horizontalLine.style.height = '1px';
+    horizontalLine.style.height = '2px';
     horizontalLine.style.top = '50%';
     horizontalLine.style.left = '0';
     reticle.appendChild(horizontalLine);
@@ -50,8 +50,8 @@ function addReticle() {
     // Vertical line
     const verticalLine = document.createElement('div');
     verticalLine.style.position = 'absolute';
-    verticalLine.style.backgroundColor = 'white';
-    verticalLine.style.width = '1px';
+    verticalLine.style.backgroundColor = 'red';
+    verticalLine.style.width = '2px';
     verticalLine.style.height = '100%';
     verticalLine.style.left = '50%';
     verticalLine.style.top = '0';
@@ -80,14 +80,16 @@ function addGun() {
 
 export function addTimerElement(seconds) {
     const timerDiv = document.createElement('div');
-    timerDiv.style.position = 'absolute';
-    timerDiv.style.top = '10px';
-    timerDiv.style.left = '10px';
-    timerDiv.style.color = 'white';
-    timerDiv.style.fontSize = '20px';
-    timerDiv.style.fontFamily = 'Arial, sans-serif';
-    timerDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-    timerDiv.style.padding = '5px';
+    Object.assign(timerDiv.style, {
+        position: 'absolute',
+        top: '10px',
+        left: '10px',
+        color: 'white',
+        fontSize: '20px',
+        fontFamily: 'Arial, sans-serif',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        padding: '5px',
+    });
     timerDiv.textContent = `Time: ${seconds}`;
     document.body.appendChild(timerDiv);
     return timerDiv;

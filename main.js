@@ -37,6 +37,31 @@ const clock = new THREE.Clock();
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
+// Game State Functions
+function startGameTimer(durationMs) {
+    let timeLeft = durationMs / 1000;
+    const timerDiv = addTimerElement(timeLeft);
+
+    const countdownInterval = setInterval(() => {
+        timeLeft--;
+        timerDiv.textContent = `Time: ${timeLeft}`;
+        if (timeLeft <= 0) {
+            clearInterval(countdownInterval);
+            endGame();
+        }
+    }, 1000);
+
+    setTimeout(() => {
+        clearInterval(countdownInterval);
+        endGame();
+    }, durationMs);
+}
+
+function endGame() {
+    running = false; // Stop animation loop
+    startGameStopAnimation(points);
+}
+
 // Utility functions
 function onClick(event) {
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -86,29 +111,11 @@ function animate() {
     }
 }
 
-const timerDiv = addTimerElement(GAMETIMER/1000); // create the timer
-
-// Update the timer text once per second
-const countdownInterval = setInterval(() => {
-    GAMETIMER -= 1000;
-    const timer_seconds = GAMETIMER/1000
-    timerDiv.textContent = `Time: ${timer_seconds}`;
-
-    if (timer_seconds <= 0) {
-        clearInterval(countdownInterval);
-        // Handle game end logic here if you want,
-        // or rely on your existing setTimeout logic.
-    }
-}, 1000);
-
 renderer.setAnimationLoop(animate);
 window.addEventListener("click", onClick);
 
-// Game Timeout
-setTimeout(() => {
-    running = false; // halt the animation loop
-    startGameStopAnimation(points);
-}, GAMETIMER);
+// Start the game timer
+startGameTimer(GAMETIMER);
 
 
 
@@ -118,25 +125,19 @@ setTimeout(() => {
 //////////////
 
 /*
-layout
 during end screen, add some toy story characters waving next to play again button
 background styling (mountains, add trees?)
-game end: countdown timer somewhere, curtain close animation, replay screen
 */
 
 ///////////////
 // Secondary //
 ///////////////
 /*
-implement gravity for projectiles, balls disappear after falling down?
 dart minimizes too quickly
 depth perception, add shaders or other elements in background
 Add background props and material
-change gun to a blaster, reticle preferred to be two concentric circles or red color
-maybe have things pop up at random times
-randomness aspect to the game
+change gun to a blaster
 reload?
-computer vision
 */
 
 /////////////
@@ -147,5 +148,4 @@ targets more than one shot to destroy
 target collision animation
 other models for targets
 make it into a midway mania theme?
-accuracy tracker?
 */
