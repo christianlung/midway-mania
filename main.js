@@ -127,6 +127,12 @@ startGameTimer(GAMETIMER);
 /*
 during end screen, add some toy story characters waving next to play again button
 background styling (mountains, add trees?)
+raycaster instant deletion of the spheres?
+top 5 high score features
+maybe have a sphere hide behind a box and go up and down
+performance efficiency
+random movement
+blaster cart model POV
 */
 
 ///////////////
@@ -134,10 +140,8 @@ background styling (mountains, add trees?)
 ///////////////
 /*
 dart minimizes too quickly
-depth perception, add shaders or other elements in background
 Add background props and material
 change gun to a blaster
-reload?
 */
 
 /////////////
@@ -147,5 +151,4 @@ reload?
 targets more than one shot to destroy
 target collision animation
 other models for targets
-make it into a midway mania theme?
 */

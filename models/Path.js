@@ -127,7 +127,7 @@ class AerialPath extends PathObject {
 
 class CurvedPath extends PathObject {
     constructor(scene, startX, depth, targets, reverse, mirror) {
-        super(scene, startX, depth, targets, 0.03, 3000, 100, reverse, mirror);
+        super(scene, startX, depth, targets, 0.03, 5000, 100, reverse, mirror);
     }
     createPath() {
         let points = [];

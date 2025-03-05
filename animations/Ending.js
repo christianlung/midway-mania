@@ -13,7 +13,8 @@ function showCurtainAnimation(callback) {
         backgroundSize: '100% 100%',
         backgroundRepeat: 'no-repeat',
         zIndex: '1000',
-        transition: 'top 0.5s ease-in-out',
+        transform: 'scale(2)',
+        transition: 'top 0.3s ease-in-out, transform 2s ease-in-out',
     });
     document.body.appendChild(fringe);
 
@@ -43,6 +44,7 @@ function showCurtainAnimation(callback) {
     // Animate the fringe first
     setTimeout(() => {
         fringe.style.top = '0';
+        fringe.style.transform = 'scale(1)';
     }, 100);
 
     // Slide in the curtains after the fringe appears
@@ -62,7 +64,7 @@ function showCurtainAnimation(callback) {
                 callback();
             }, 200);
         }, transitionSeconds * 1000);
-    }, 500); // Delay so fringe appears first
+    }, 2000); // Delay so fringe appears first
 }
 
 function showGameOverScreen(points) {
