@@ -6,16 +6,24 @@ import { setHud, addTimerElement } from './hud.js';
 import { HillPath, AerialPath, CurvedPath, FastPath } from './models/Path.js';
 import { createBackdrop } from './models/Backdrop.js';
 import { explodeAndRemove } from './models/Sphere.js';
+import { addBulletCounter } from './hud.js';
+import { addGun } from './hud.js'
 import startGameStopAnimation from './animations/Ending.js';
 
 // Scene Setup
 const { scene, camera, renderer } = createScene();
 const pointsCounter = setHud(renderer);
+const bulletCounter = addBulletCounter();
+const gun = addGun();
 
 // Game Logic
 let targets = [];
 let projectiles = [];
 let points = 0;
+let bullets = 12;
+let hits = 0;
+let shots = 0;
+const maxAmmo = 12;
 const Z_FURTHEST = -20;
 let GAMETIMER = 60000; // milliseconds
 
@@ -59,17 +67,73 @@ function startGameTimer(durationMs) {
 
 function endGame() {
     running = false; // Stop animation loop
-    startGameStopAnimation(points);
+    let Accuracy = 0
+    if (shots != 0) {
+        Accuracy = 100 * hits / shots;
+        Accuracy = parseFloat(Accuracy.toFixed(2));
+    }
+    startGameStopAnimation(points, Accuracy);
 }
 
 // Utility functions
 function onClick(event) {
+    if (running == false) {
+        return;
+    }
+    if (bullets <= 0) {
+        showReloadMessage();
+        return;
+
+    }
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
     raycaster.setFromCamera(mouse, camera);
 
     shootDart(camera, scene, raycaster, 10, projectiles);
+    bullets -= 1;
+    shots += 1;
+    bulletCounter.textContent = `Bullets: ${bullets}`;
+}
+
+function showReloadMessage() {
+    // Create the message element
+    const message = document.createElement('div');
+    message.textContent = "Press 'R' to reload!";
+    message.style.position = 'absolute';
+    message.style.bottom = '20px'; 
+    message.style.left = '50%'; 
+    message.style.transform = 'translateX(-50%)'; 
+    message.style.backgroundColor = 'rgba(0, 0, 0, 1)'; 
+    message.style.color = 'white';
+    message.style.fontSize = '18px';
+    message.style.fontFamily = 'Arial, sans-serif';
+    message.style.padding = '10px';
+    message.style.borderRadius = '5px';
+    message.style.zIndex = '1000'; 
+    document.body.appendChild(message);
+
+    // Remove the message after 1.5 seconds
+    setTimeout(() => {
+        message.style.transition = 'opacity 0.5s ease-out'; 
+        message.style.opacity = '0'; 
+        setTimeout(() => message.remove(), 500); 
+    }, 1500); 
+}
+
+function reload() {
+    gun.style.transition = 'opacity 0.5s ease-in-out'; 
+    gun.style.opacity = '0';
+    
+
+    setTimeout(() => {
+        bullets = maxAmmo; 
+        bulletCounter.textContent = `Bullets: ${bullets}`; 
+        gun.style.transition = 'opacity 0.5s ease-in-out'; 
+        gun.style.opacity = '1'; 
+    }, 1500);
+    
+   
 }
 
 function animate() {
@@ -98,7 +162,7 @@ function animate() {
             if (checkCollision(dart, sphere)) {
                 points += sphere.userData.points;
                 pointsCounter.textContent = `Points: ${points}`;
-
+                hits += 1;
                 // Remove sphere and dart
                 explodeAndRemove(scene, sphere);
                 targets.splice(sphereIndex, 1);
@@ -113,6 +177,12 @@ function animate() {
 
 renderer.setAnimationLoop(animate);
 window.addEventListener("click", onClick);
+window.addEventListener('keydown', (event) => {
+    if (event.key === 'r' || event.key === 'R') {
+        reload(); // Reload the bullets when "R" is pressed
+    }
+});
+
 
 // Start the game timer
 startGameTimer(GAMETIMER);

@@ -67,7 +67,7 @@ function showCurtainAnimation(callback) {
     }, 2000); // Delay so fringe appears first
 }
 
-function showGameOverScreen(points) {
+function showGameOverScreen(points, Accuracy) {
     const overlay = document.createElement('div');
     Object.assign(overlay.style, {
         position: 'fixed',
@@ -84,7 +84,9 @@ function showGameOverScreen(points) {
         fontSize: '30px',
         zIndex: '1001'
     });
-    overlay.innerHTML = `<div>Final Score: ${points}</div>`;
+    overlay.innerHTML = `<div>Final Score: ${points}</div>
+                         <div>Accuracy: ${Accuracy}%</div>`;
+    
 
     const playAgainButton = document.createElement('button');
     Object.assign(playAgainButton.style, {
@@ -100,6 +102,6 @@ function showGameOverScreen(points) {
     document.body.appendChild(overlay);
 }
 
-export default function startGameStopAnimation(points) {
-    showCurtainAnimation(() => showGameOverScreen(points));
+export default function startGameStopAnimation(points, Accuracy) {
+    showCurtainAnimation(() => showGameOverScreen(points, Accuracy));
 }
