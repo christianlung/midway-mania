@@ -6,7 +6,6 @@ export function setHud(renderer) {
     renderer.domElement.style.cursor = 'none';
     
     addReticle();
-    addGun();
     return addPointsCounter();
 }
 
@@ -64,7 +63,7 @@ function addReticle() {
       });
 }
 
-function addGun() {
+export function addGun() {
     const gun = document.createElement('img');
     gun.src = 'images/pxArt-l.png'; 
     gun.style.position = 'absolute';
@@ -76,6 +75,8 @@ function addGun() {
         const gunOffsetX = event.clientX - (gun.offsetWidth / 2);
         gun.style.left = `${gunOffsetX}px`;
       });
+
+    return gun;
 }
 
 export function addTimerElement(seconds) {
@@ -93,6 +94,21 @@ export function addTimerElement(seconds) {
     timerDiv.textContent = `Time: ${seconds}`;
     document.body.appendChild(timerDiv);
     return timerDiv;
+}
+
+export function addBulletCounter() {
+    const bulletCounter = document.createElement('div');
+    bulletCounter.style.position = 'absolute';
+    bulletCounter.style.bottom = '10px';
+    bulletCounter.style.left = '10px';
+    bulletCounter.style.color = 'white';
+    bulletCounter.style.fontSize = '20px';
+    bulletCounter.style.fontFamily = 'Arial, sans-serif';
+    bulletCounter.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    bulletCounter.style.padding = '5px';
+    bulletCounter.textContent = `Bullets: 12`; 
+    document.body.appendChild(bulletCounter);
+    return bulletCounter;
 }
 
 
