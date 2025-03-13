@@ -131,7 +131,7 @@ function reload() {
         bulletCounter.textContent = `Bullets: ${bullets}`; 
         gun.style.transition = 'opacity 0.5s ease-in-out'; 
         gun.style.opacity = '1'; 
-    }, 1500);
+    }, 750);
     
    
 }
